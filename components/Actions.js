@@ -15,7 +15,6 @@ const Actions = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [speechToText, setSpeechToText] = useState(null);
-  const [enableSoundMonitor,setEnableSoundMonitor]=useState(false)
 
   const startSoundMonitoring = async () => {
     try {
@@ -35,7 +34,6 @@ const Actions = () => {
           if (!isRecording) {
             console.log("High sound level detected:", avgVolume);
             setIsRecording(true)
-            setEnableSoundMonitor(false)
           }
         }
 
@@ -124,7 +122,6 @@ const Actions = () => {
         })
         const res = await req.json()
         console.log(res.response)
-        setEnableSoundMonitor(true)
       })()
       console.log("speechToText-", speechToText)
     }
@@ -132,13 +129,8 @@ const Actions = () => {
 
 
   useEffect(() => {
-    if (mode) setEnableSoundMonitor(true)
-    else setEnableSoundMonitor(false)
+    if (mode) startSoundMonitoring();
   }, [mode]);
-
-  useEffect(()=>{
-    if(enableSoundMonitor) startSoundMonitoring()
-  },[enableSoundMonitor])
 
   const getLocation = async () => {
     const GPS = () => {
