@@ -5,12 +5,6 @@ const Actions = () => {
   const [loading, setLoading] = useState(false);
   const [soundLevel, setSoundLevel] = useState(null);
   const [mode, setMode] = useState(false);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-  const [time, setTime] = useState(null);
-  const [weather, setWeather] = useState(null);
-  const [motion, setMotion] = useState(null);
-  const [safePlaces, setSafePlaces] = useState(null);
   const [currentData, setCurrentData] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -160,8 +154,6 @@ const Actions = () => {
 
     try {
       const gpsLocation = await GPS();
-      setLatitude(gpsLocation.lat);
-      setLongitude(gpsLocation.lng);
       return gpsLocation;
     } catch (error) {
       console.warn("Falling back to API due to error:", error);
@@ -180,32 +172,27 @@ const Actions = () => {
     }
 
     const res = await req.json();
-    setLatitude(res.data.lat);
-    setLongitude(res.data.lng);
-    console.log("Location obtained from API:", res.data);
     return res.data;
   };
 
   const getTime = async () => {
     const req = await fetch("/api/get/time");
     const res = await req.json();
-    setTime(res.time);
     return res.time;
   };
 
-  const getWeather = async () => {
+  const getWeather = async (lat,lng) => {
     const req = await fetch('/api/get/weather', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        latitude: latitude,
-        longitude: longitude
+        latitude: lat,
+        longitude: lng
       })
     })
     const res = await req.json()
-    setWeather(res.data)
     return res.data
   }
 
@@ -272,7 +259,6 @@ const Actions = () => {
       const motionInterval = setInterval(() => {
         const detectedMotion = analyzeMotion();
         if (detectedMotion) {
-          setMotion(detectedMotion);
           resolve(detectedMotion);
           clearInterval(motionInterval);
           window.removeEventListener("devicemotion", handleDeviceMotion);
@@ -281,19 +267,18 @@ const Actions = () => {
     });
   };
 
-  const getSafePlace = async () => {
+  const getSafePlace = async (lat,lng) => {
     const req = await fetch("/api/get/safePlaces", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        latitude: latitude,
-        longitude: longitude,
+        latitude: lat,
+        longitude: lng,
       }),
     });
     const res = await req.json();
-    setSafePlaces(res.data);
     return res.data;
   };
 
@@ -302,11 +287,10 @@ const Actions = () => {
       setLoading(true);
       const gpsLocation = await getLocation();
       if (!gpsLocation) return;
-
       const gatheredTime = await getTime();
-      const gatheredWeather = await getWeather();
+      const gatheredWeather = await getWeather(gpsLocation.lat, gpsLocation.lng);
       const gatheredMotion = await getMotion();
-      const gatheredSafePlaces = await getSafePlace();
+      const gatheredSafePlaces = await getSafePlace(gpsLocation.lat, gpsLocation.lng);
 
       const newData = {
         latitude: gpsLocation.lat,
@@ -339,12 +323,6 @@ const Actions = () => {
   const handleClick = () => {
     if (mode) {
       setMode(false);
-      setLatitude(null);
-      setLongitude(null);
-      setTime(null);
-      setWeather(null);
-      setMotion(null);
-      setSafePlaces(null);
       setCurrentData(null);
     } else {
       setMode(true);
