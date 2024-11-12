@@ -9,7 +9,7 @@ const Actions = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [speechToText, setSpeechToText] = useState(null);
-  const [currentNotification, setCurrentNotification] = useState([])
+  const [currentNotification, setCurrentNotification] = useState([]) 
 
   const startSoundMonitoring = async () => {
     try {
@@ -162,11 +162,11 @@ const Actions = () => {
     }
   }, [speechToText])
 
-  useEffect(()=>{
-    if(currentNotification.length > 0){
+  useEffect(() => {
+    if (currentNotification.length > 0) {
       console.log(currentNotification)
     }
-  },[currentNotification])
+  }, [currentNotification])
 
 
   useEffect(() => {
