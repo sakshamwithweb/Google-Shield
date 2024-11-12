@@ -11,25 +11,6 @@ const Actions = () => {
   const [speechToText, setSpeechToText] = useState(null);
   const [currentNotification, setCurrentNotification] = useState([]) 
 
-  const vibratePattern = (riskLevel) => {
-    if ("vibrate" in navigator) {
-      switch (riskLevel) {
-        case "low":
-          navigator.vibrate(1000); // Vibrate once for 1 second
-          break;
-        case "medium":
-          navigator.vibrate([1000, 1000, 1000]); // Vibrate 1 sec, pause 1 sec, vibrate 1 sec
-          break;
-        case "high":
-          navigator.vibrate([1000, 1000, 1000, 1000, 1000]); // Vibrate 1 sec, pause 1 sec, vibrate 1 sec, pause 1 sec, vibrate 1 sec
-          break;
-        default:
-          navigator.vibrate(0); // Stop any ongoing vibration
-          break;
-      }
-    }
-  };
-
   const startSoundMonitoring = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -413,10 +394,6 @@ const Actions = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-8">
-    <button onClick={() => vibratePattern("high")} className="mt-4 p-2 bg-blue-500 text-white">
-  Test High-Risk Vibration
-</button>
-
       <span className="mb-8 text-lg text-gray-700">
         Sound Level: {soundLevel !== null ? soundLevel : "N/A"}
       </span>
