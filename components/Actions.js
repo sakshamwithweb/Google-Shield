@@ -9,10 +9,10 @@ const Actions = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [speechToText, setSpeechToText] = useState(null);
-  const [currentNotification, setCurrentNotification] = useState([]) 
+  const [currentNotification, setCurrentNotification] = useState([])
 
   const startSoundMonitoring = async () => {
-    try {
+    try { 
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioContext.createMediaStreamSource(stream);
@@ -380,7 +380,7 @@ const Actions = () => {
     setCurrentNotification(prevState => {
       const newNotifications = [...prevState];
       const notification = newNotifications[index];
-      
+
       // Toggle between showing message and removing the notification
       if (notification.clicked) {
         newNotifications.splice(index, 1); // Remove notification on second click
@@ -390,7 +390,7 @@ const Actions = () => {
       return newNotifications;
     });
   };
-  
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-8">
@@ -431,7 +431,7 @@ const Actions = () => {
       <span className="mb-8 text-lg text-gray-700">
         It is {mode ? "on" : loading ? "getting on" : "off"}
       </span>
-  
+
       {/* Notifications Section on the right side of the screen */}
       <div className="fixed right-4 top-1/4 space-y-4">
         {currentNotification.map((notification, index) => (
@@ -462,8 +462,8 @@ const Actions = () => {
       </div>
     </div>
   );
-  
-  
+
+
 };
 
 export default Actions;
