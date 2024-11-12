@@ -132,13 +132,19 @@ const Actions = () => {
           } else if (arr[0].includes("Issue a warning")) {
             console.log("medium risk")
             //1st task
+            const safePlace=currentData.safePlaces
             setCurrentNotification(prevState => [
               ...prevState,
               {
                 color: "yellow",
                 message: "Just a warning that you should be aware.",
+              },
+              {
+                color: "yellow",
+                message: `The safe nearby locations are: ${safePlace[0].name} which is ${Math.floor(safePlace[0].distance * 100)} meters away.\n${safePlace[1].name} which is ${Math.floor(safePlace[1].distance * 100)} meters away. \n${safePlace[2].name} which is ${Math.floor(safePlace[2].distance * 100)} meters away.`,
               }
             ]);
+            
           }
           else if (arr[0].includes("Alert the user")) {
             console.log("high risk")
