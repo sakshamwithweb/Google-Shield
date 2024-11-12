@@ -104,8 +104,7 @@ const Actions = () => {
 
   useEffect(() => {
     if (speechToText !== null && currentData !== null) {
-      console.log(speechToText)
-      const sendRequestToAI = async () => {
+      (async () => {
         const req = await fetch('/api/get/sendRequestToAI', {
           method: 'POST',
           headers: {
@@ -156,19 +155,18 @@ const Actions = () => {
             console.log("no risk")
           } else {
             console.error(error)
-            // do again
           }
         }
-      }
-      sendRequestToAI()
+      })()
+      console.log(speechToText)
     }
   }, [speechToText])
 
-  useEffect(() => {
-    if (currentNotification.length > 0) {
+  useEffect(()=>{
+    if(currentNotification.length > 0){
       console.log(currentNotification)
     }
-  }, [currentNotification]);
+  },[currentNotification])
 
 
   useEffect(() => {
