@@ -9,6 +9,7 @@ const Actions = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [speechToText, setSpeechToText] = useState(null);
+  const [currentNotification, setCurrentNotification] = useState([])
 
   const startSoundMonitoring = async () => {
     try {
@@ -103,7 +104,8 @@ const Actions = () => {
 
   useEffect(() => {
     if (speechToText !== null && currentData !== null) {
-      (async () => {
+      console.log(speechToText)
+      const sendRequestToAI = async () => {
         const req = await fetch('/api/get/sendRequestToAI', {
           method: 'POST',
           headers: {
@@ -120,26 +122,53 @@ const Actions = () => {
           const arr = JSON.parse(res.response)
           if (arr[0].includes("Advise caution")) {
             console.log("low risk")
-            //low risk
+            //1st task
+            setCurrentNotification(prevState => [
+              ...prevState,
+              {
+                color: "green",
+                message: "Just a message that you should be aware.",
+              }
+            ]);
           } else if (arr[0].includes("Issue a warning")) {
             console.log("medium risk")
-            //medium risk
+            //1st task
+            setCurrentNotification(prevState => [
+              ...prevState,
+              {
+                color: "yellow",
+                message: "Just a warning that you should be aware.",
+              }
+            ]);
           }
           else if (arr[0].includes("Alert the user")) {
             console.log("high risk")
-            //high risk
+            setCurrentNotification(prevState => [
+              ...prevState,
+              {
+                color: "red",
+                message: "It seems you are in danger! If not so reload the page.",
+              }
+            ]);
           }
         } catch (error) {
           if (res.response.includes("false")) {
             console.log("no risk")
           } else {
             console.error(error)
+            // do again
           }
         }
-      })()
-      console.log(speechToText)
+      }
+      sendRequestToAI()
     }
   }, [speechToText])
+
+  useEffect(() => {
+    if (currentNotification.length > 0) {
+      console.log(currentNotification)
+    }
+  }, [currentNotification]);
 
 
   useEffect(() => {
