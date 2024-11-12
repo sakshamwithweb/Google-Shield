@@ -144,6 +144,7 @@ const Actions = () => {
                 message: `The safe nearby locations are: ${safePlace[0].name} which is ${Math.floor(safePlace[0].distance * 100)} meters away.\n${safePlace[1].name} which is ${Math.floor(safePlace[1].distance * 100)} meters away. \n${safePlace[2].name} which is ${Math.floor(safePlace[2].distance * 100)} meters away.`,
               }
             ]);
+            window.location.href = "tel:";
             
           }
           else if (arr[0].includes("Alert the user")) {

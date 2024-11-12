@@ -20,7 +20,6 @@ export async function POST(request) {
       actions: [
         "Issue a warning to the user.",
         "Suggest nearby safe places.",
-        "Activate silent mode to avoid drawing attention.",
         "Enable quick access to emergency contacts for easy outreach."
       ]
     },
