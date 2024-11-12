@@ -9,7 +9,7 @@ const Actions = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [speechToText, setSpeechToText] = useState(null);
-  const [currentNotification, setCurrentNotification] = useState([])
+  const [currentNotification, setCurrentNotification] = useState([]) 
 
   const startSoundMonitoring = async () => {
     try {
@@ -377,14 +377,20 @@ const Actions = () => {
   };
 
   const handleClickNotification = (index) => {
-    // Remove the notification when it is clicked (closed)
     setCurrentNotification(prevState => {
       const newNotifications = [...prevState];
-      newNotifications.splice(index, 1);
+      const notification = newNotifications[index];
+      
+      // Toggle between showing message and removing the notification
+      if (notification.clicked) {
+        newNotifications.splice(index, 1); // Remove notification on second click
+      } else {
+        notification.clicked = true; // Mark the notification as clicked to show message
+      }
       return newNotifications;
     });
   };
-
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-8">
@@ -425,21 +431,31 @@ const Actions = () => {
       <span className="mb-8 text-lg text-gray-700">
         It is {mode ? "on" : loading ? "getting on" : "off"}
       </span>
+  
+      {/* Notifications Section on the right side of the screen */}
       <div className="fixed right-4 top-1/4 space-y-4">
         {currentNotification.map((notification, index) => (
           <div
             key={index}
-            onClick={() => handleClickNotification(index)} // Remove notification on click
-            className={`cursor-pointer p-4 rounded-full text-white ${notification.color === 'green' ? 'bg-green-500' : notification.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'}`}
-            style={{ maxWidth: '250px' }}
+            className="flex items-center space-x-2 cursor-pointer"
+            onClick={() => handleClickNotification(index)}  // Toggle between circle and message
           >
-            <span className="font-semibold">{notification.message}</span>
+            {/* Circle with the color */}
+            <div
+              className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold ${notification.color === 'green' ? 'bg-green-500' : notification.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'}`}
+              style={{ maxWidth: '80px', maxHeight: '80px' }}
+            >
+              {/* If the notification is clicked, show the message */}
+              {notification.clicked ? (
+                <span className="text-xs p-2">{notification.message}</span>
+              ) : null}
+            </div>
           </div>
         ))}
       </div>
-
     </div>
   );
+  
 };
 
 export default Actions;
