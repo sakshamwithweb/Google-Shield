@@ -38,7 +38,7 @@ export async function POST(request) {
 
   const actionByAI = JSON.stringify(actionByAIRough)
 
-  const prompt = `I am a program which have duty to take actions for user(women). I have data of environment as -${currentDataString} and I recorded some part of user's voice and converted into text as- ${speechToText} . Firstly Identify wether the the user is in danger or not if yes so move forward or else simple response plain false. Now we know that user is in danger so categorize the risk level into low, medium, high. It is the tasks to do according to the risk level- ${actionByAI} . Give a plain array only where there will be actions AI will do. No MD`;
+  const prompt = `I am a program which have duty to take actions for user(women). I have data of environment as -${currentDataString} and I recorded some part of user's voice and converted into text as- ${speechToText} . Firstly Identify wether the the user is in danger or not if yes so move forward or else simple response plain false. Now we know that user is in danger so categorize the risk level into low, medium, high. It is the tasks to do according to the risk level- ${actionByAI} . Give a plain array only where there will be actions AI will do. No MD at any cost`;
 
   console.log(prompt)
   const response = await openai.chat.completions.create({

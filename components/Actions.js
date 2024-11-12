@@ -116,8 +116,9 @@ const Actions = () => {
         })
         const res = await req.json()
         console.log(res.response)
+        const arr = JSON.parse(res.response)
+        console.log(typeof arr , arr)
       })()
-      console.log("speechToText-", speechToText)
     }
   }, [speechToText])
 
