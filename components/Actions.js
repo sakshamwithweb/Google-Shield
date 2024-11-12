@@ -9,7 +9,7 @@ const Actions = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [speechToText, setSpeechToText] = useState(null);
-  const [currentNotification, setCurrentNotification] = useState([]) 
+  const [currentNotification, setCurrentNotification] = useState([])
 
   const startSoundMonitoring = async () => {
     try {
@@ -376,6 +376,16 @@ const Actions = () => {
     }
   };
 
+  const handleClickNotification = (index) => {
+    // Remove the notification when it is clicked (closed)
+    setCurrentNotification(prevState => {
+      const newNotifications = [...prevState];
+      newNotifications.splice(index, 1);
+      return newNotifications;
+    });
+  };
+
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-8">
       <span className="mb-8 text-lg text-gray-700">
@@ -415,6 +425,18 @@ const Actions = () => {
       <span className="mb-8 text-lg text-gray-700">
         It is {mode ? "on" : loading ? "getting on" : "off"}
       </span>
+      <div className="flex flex-col items-center w-full mt-6 space-y-4">
+        {currentNotification.map((notification, index) => (
+          <div
+            key={index}
+            onClick={() => handleClickNotification(index)}  // When clicked, remove notification
+            className={`cursor-pointer p-4 rounded-full text-white ${notification.color === 'green' ? 'bg-green-500' : notification.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'}`}
+          >
+            <span className="font-semibold">Click to read more</span>
+          </div>
+        ))}
+      </div>
+
     </div>
   );
 };
