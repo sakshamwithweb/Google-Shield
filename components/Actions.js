@@ -440,14 +440,21 @@ const Actions = () => {
             className="flex items-center space-x-2 cursor-pointer"
             onClick={() => handleClickNotification(index)}  // Toggle between circle and message
           >
-            {/* Circle with the color */}
+            {/* Circle with the color and dynamic size */}
             <div
-              className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold ${notification.color === 'green' ? 'bg-green-500' : notification.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'}`}
-              style={{ maxWidth: '80px', maxHeight: '80px' }}
+              className={`flex items-center justify-center text-white font-semibold transition-all duration-300 ${notification.color === 'green' ? 'bg-green-500' : notification.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'}`}
+              style={{
+                width: notification.clicked ? '200px' : '80px',  // Increase width when clicked
+                height: notification.clicked ? '200px' : '80px', // Increase height when clicked
+                borderRadius: '50%', // Keep it circular
+                maxWidth: '200px',  // Prevent the bubble from becoming too large
+                maxHeight: '200px',  // Prevent the bubble from becoming too large
+                overflow: 'hidden',  // Hide overflow text when not clicked
+                padding: notification.clicked ? '10px' : '0px',  // Add padding when message is visible
+              }}
             >
-              {/* If the notification is clicked, show the message */}
               {notification.clicked ? (
-                <span className="text-xs p-2">{notification.message}</span>
+                <span className="text-xs text-center">{notification.message}</span>  // Wrap text
               ) : null}
             </div>
           </div>
@@ -455,6 +462,7 @@ const Actions = () => {
       </div>
     </div>
   );
+  
   
 };
 
