@@ -11,6 +11,25 @@ const Actions = () => {
   const [speechToText, setSpeechToText] = useState(null);
   const [currentNotification, setCurrentNotification] = useState([]) 
 
+  const vibratePattern = (riskLevel) => {
+    if ("vibrate" in navigator) {
+      switch (riskLevel) {
+        case "low":
+          navigator.vibrate(1000); // Vibrate once for 1 second
+          break;
+        case "medium":
+          navigator.vibrate([1000, 1000, 1000]); // Vibrate 1 sec, pause 1 sec, vibrate 1 sec
+          break;
+        case "high":
+          navigator.vibrate([1000, 1000, 1000, 1000, 1000]); // Vibrate 1 sec, pause 1 sec, vibrate 1 sec, pause 1 sec, vibrate 1 sec
+          break;
+        default:
+          navigator.vibrate(0); // Stop any ongoing vibration
+          break;
+      }
+    }
+  };
+
   const startSoundMonitoring = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -121,6 +140,7 @@ const Actions = () => {
           const arr = JSON.parse(res.response)
           if (arr[0].includes("Advise caution")) {
             console.log("low risk")
+            vibratePattern("low");
             //1st task
             setCurrentNotification(prevState => [
               ...prevState,
@@ -131,6 +151,7 @@ const Actions = () => {
             ]);
           } else if (arr[0].includes("Issue a warning")) {
             console.log("medium risk")
+            vibratePattern("medium");
             //1st task
             setCurrentNotification(prevState => [
               ...prevState,
@@ -142,6 +163,7 @@ const Actions = () => {
           }
           else if (arr[0].includes("Alert the user")) {
             console.log("high risk")
+            vibratePattern("high");
             setCurrentNotification(prevState => [
               ...prevState,
               {
