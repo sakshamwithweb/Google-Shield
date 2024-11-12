@@ -140,7 +140,6 @@ const Actions = () => {
           const arr = JSON.parse(res.response)
           if (arr[0].includes("Advise caution")) {
             console.log("low risk")
-            vibratePattern("low");
             //1st task
             setCurrentNotification(prevState => [
               ...prevState,
@@ -151,7 +150,6 @@ const Actions = () => {
             ]);
           } else if (arr[0].includes("Issue a warning")) {
             console.log("medium risk")
-            vibratePattern("medium");
             //1st task
             setCurrentNotification(prevState => [
               ...prevState,
@@ -163,7 +161,6 @@ const Actions = () => {
           }
           else if (arr[0].includes("Alert the user")) {
             console.log("high risk")
-            vibratePattern("high");
             setCurrentNotification(prevState => [
               ...prevState,
               {
@@ -416,6 +413,10 @@ const Actions = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-8">
+    <button onClick={() => vibratePattern("high")} className="mt-4 p-2 bg-blue-500 text-white">
+  Test High-Risk Vibration
+</button>
+
       <span className="mb-8 text-lg text-gray-700">
         Sound Level: {soundLevel !== null ? soundLevel : "N/A"}
       </span>
