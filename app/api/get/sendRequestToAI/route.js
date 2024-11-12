@@ -34,11 +34,14 @@ export async function POST(request) {
       ]
     }
   ];
-  
+
 
   const actionByAI = JSON.stringify(actionByAIRough)
 
-  const prompt = `I am a program which have duty to take actions for user(women). I have data of environment as -${currentDataString} and I recorded some part of user's voice and converted into text as- ${speechToText} . Firstly Identify wether the the user is in danger or not if yes so move forward or else simple response plain false. Now we know that user is in danger so categorize the risk level into low, medium, high. It is the tasks to do according to the risk level- ${actionByAI} . Give a plain array only where there will be actions AI will do. No MD at any cost`;
+  const prompt = `I am a program designed to assess and respond to potential danger for the user (female). Using the available environmental data: "${currentDataString}" and the transcribed user voice data: "${speechToText}", determine if the user is in danger. If no danger is detected, respond with just "false".
+If danger is detected, assess the risk level as "low", "medium", or "high" based on the data. 
+Based on the assessed risk level, take the actions listed in: "${actionByAI}".
+If risk is detected , Output only a plain array of actions to be taken by the AI, no additional text or Markdown format.But if no risk so output false only.`;
 
   console.log(prompt)
   const response = await openai.chat.completions.create({

@@ -110,15 +110,34 @@ const Actions = () => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            currentData:currentData,
-            speechToText:speechToText
+            currentData: currentData,
+            speechToText: speechToText
           })
         })
         const res = await req.json()
         console.log(res.response)
-        const arr = JSON.parse(res.response)
-        console.log(typeof arr , arr)
+        try {
+          const arr = JSON.parse(res.response)
+          if (arr[0].includes("Advise caution")) {
+            console.log("low risk")
+            //low risk
+          } else if (arr[0].includes("Issue a warning")) {
+            console.log("medium risk")
+            //medium risk
+          }
+          else if (arr[0].includes("Alert the user")) {
+            console.log("high risk")
+            //high risk
+          }
+        } catch (error) {
+          if (res.response.includes("false")) {
+            console.log("no risk")
+          } else {
+            console.error(error)
+          }
+        }
       })()
+      console.log(speechToText)
     }
   }, [speechToText])
 
@@ -182,7 +201,7 @@ const Actions = () => {
     return res.time;
   };
 
-  const getWeather = async (lat,lng) => {
+  const getWeather = async (lat, lng) => {
     const req = await fetch('/api/get/weather', {
       method: 'POST',
       headers: {
@@ -268,7 +287,7 @@ const Actions = () => {
     });
   };
 
-  const getSafePlace = async (lat,lng) => {
+  const getSafePlace = async (lat, lng) => {
     const req = await fetch("/api/get/safePlaces", {
       method: "POST",
       headers: {
