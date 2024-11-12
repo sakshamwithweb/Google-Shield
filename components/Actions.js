@@ -425,14 +425,15 @@ const Actions = () => {
       <span className="mb-8 text-lg text-gray-700">
         It is {mode ? "on" : loading ? "getting on" : "off"}
       </span>
-      <div className="flex flex-col items-center w-full mt-6 space-y-4">
+      <div className="fixed right-4 top-1/4 space-y-4">
         {currentNotification.map((notification, index) => (
           <div
             key={index}
-            onClick={() => handleClickNotification(index)}  // When clicked, remove notification
+            onClick={() => handleClickNotification(index)} // Remove notification on click
             className={`cursor-pointer p-4 rounded-full text-white ${notification.color === 'green' ? 'bg-green-500' : notification.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'}`}
+            style={{ maxWidth: '250px' }}
           >
-            <span className="font-semibold">Click to read more</span>
+            <span className="font-semibold">{notification.message}</span>
           </div>
         ))}
       </div>
