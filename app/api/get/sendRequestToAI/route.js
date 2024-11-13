@@ -27,9 +27,7 @@ export async function POST(request) {
       risk: "high",
       actions: [
         "Alert the user immediately about the danger.",
-        "Activate silent mode to ensure the user remains discreet.",
-        "Call and send updates to emergency contacts with the user’s current location and status.",
-        "Call emergency services directly with the user's location and situation details."
+        "Call and send updates to emergency contacts with the user's current location and status.",
       ]
     }
   ];

@@ -1,4 +1,5 @@
 "use client"
+import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const Actions = () => {
@@ -12,7 +13,7 @@ const Actions = () => {
   const [currentNotification, setCurrentNotification] = useState([])
 
   const startSoundMonitoring = async () => {
-    try { 
+    try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioContext.createMediaStreamSource(stream);
@@ -132,7 +133,7 @@ const Actions = () => {
           } else if (arr[0].includes("Issue a warning")) {
             console.log("medium risk")
             //1st task
-            const safePlace=currentData.safePlaces
+            const safePlace = currentData.safePlaces
             setCurrentNotification(prevState => [
               ...prevState,
               {
@@ -145,7 +146,7 @@ const Actions = () => {
               }
             ]);
             window.location.href = "tel:";
-            
+
           }
           else if (arr[0].includes("Alert the user")) {
             console.log("high risk")
@@ -156,6 +157,23 @@ const Actions = () => {
                 message: "It seems you are in danger! If not so reload the page.",
               }
             ]);
+            (async () => {
+              const userDataString = localStorage.getItem('userData');
+              const userData = userDataString ? JSON.parse(userDataString) : null;
+              const name = userData ? userData.name : null;
+              const emergencyContact = userData ? userData.emergencyContact : null;
+              console.log(emergencyContact);
+              const req = await fetch('/api/call', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  phoneNumber: emergencyContact,// Now u need to have name and emergencyNo on localstorage
+                  message: `Hello, I am assistant of ${name} and I have observed that she is in danger. Her location is ${currentData.latitude}, ${currentData.longitude}. Her status is ${currentData.status}. I would recommed to call to she. Thanks!`,
+                })
+              })
+            })()
           }
         } catch (error) {
           if (res.response.includes("false")) {
@@ -397,6 +415,10 @@ const Actions = () => {
       return newNotifications;
     });
   };
+
+  useEffect(() => {
+    if (!localStorage.getItem('userData')) redirect('/login')
+  }, [])
 
 
   return (
